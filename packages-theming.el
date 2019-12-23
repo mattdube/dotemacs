@@ -32,7 +32,7 @@
 ;;   :init (progn (load-theme 'heroku t)
 ;; 	       (enable-theme 'heroku))
 ;;   )
-;; (use-package ample-theme
+;;;; (use-package ample-theme
 ;;   :defer t
 ;;   :ensure t
 ;;   :init (progn (load-theme 'ample t t)
@@ -41,5 +41,28 @@
 ;;                (enable-theme 'ample-light))
 ;;   )
 ;; Use the  built-in dichromacy
-(load-theme 'dichromacy t)
-(enable-theme 'dichromacy)
+;;(load-theme 'dichromacy t)
+;;(enable-theme 'dichromacy)
+;; (use-package paper-theme
+;;   :ensure t
+;;   :defer t
+;;   :init (progn (load-theme 'paper t)
+;; 	       (enable-theme 'paper))
+;;   )
+   
+ (use-package nimbus-theme
+   :ensure t
+   :defer t
+   :init (progn (load-theme 'nimbus t)
+ 	       (enable-theme 'nimbus))
+   )
+   
+   
+;;  (use-package flucui-theme
+;;  :ensure t
+;;  :defer t
+;;  :init (progn (load-theme 'flucui-light t)
+;;  	   (enable-theme 'flucui-light))
+;;  )
+
+

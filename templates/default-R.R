@@ -1,7 +1,7 @@
 ################################################################################
 ################################################################################
 ## Title: ${1:Some Title}
-## Author: Steve Lane
+## Author: Matt Dube
 ## Date: `(format-time-string "%A, %d %B %Y" (current-time))`
 ## Synopsis: ${2:Description}
 ## Time-stamp: <>

@@ -1,0 +1,28 @@
+ls
+pwd
+cd ~
+pwd
+cd ~/HOME
+pwd
+ls -l
+cd $
+cd /home
+cd home
+cd /Users/e155986/git_repos/
+ls
+ls -lrt
+pwd
+ps -ef |grep top
+ps -ef
+git status
+cd ..
+cd `OneDrive - Ameren`
+cd 'OneDrive - Ameren'
+ls
+cd 'My Projects'
+ls
+cd PDSwr2
+ls
+git status
+Test.R
+julia

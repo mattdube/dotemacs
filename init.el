@@ -1,4 +1,4 @@
-;; Time-stamp: <2019-02-15 12:08:33 (slane)>
+;; Time-stamp: <2019-07-31 15:30:40 (e155986)>
 ;; init.el for emacs setup
 ;; separate files are provided that do different things for easy maintaining
 
@@ -83,49 +83,49 @@
       )
   )
 
-;; Set fonts based on system/screensize
-;; (if (eq window-system nil)
-;;     ;; if no window/no X                                                        
-;;     (when (member "Hack" (font-family-list))
-;;       (add-to-list 'initial-frame-alist '(font . "Hack-10"))
-;;       (add-to-list 'default-frame-alist '(font . "Hack-10")))
-;;     ;; else if windowed system
-;;     ;; and its an x system (which has different sizes... why?
-;;     (if (eq window-system 'x)
-;;       ;; Bigger external screen
-;;       (if (> (x-display-pixel-width) 2000)
-;; 	  ;; Bigger external screen
-;; 	  (when (member "Hack" (font-family-list))
-;; 	    (add-to-list 'initial-frame-alist '(font . "Hack-18"))
-;; 	    (add-to-list 'default-frame-alist '(font . "Hack-18")))
-;; 	  (if (< (x-display-pixel-width) 1300)
-;; 	      ;; smaller retina
-;; 	      (when (member "Hack" (font-family-list))
-;; 		(add-to-list 'initial-frame-alist '(font . "Hack-9"))
-;; 		(add-to-list 'default-frame-alist '(font . "Hack-9")))
-;; 	      (when (member "Hack" (font-family-list))
-;; 		(add-to-list 'initial-frame-alist '(font . "Hack-14"))
-;; 		(add-to-list 'default-frame-alist '(font . "Hack-14"))))
-;; 	  )))
+  
+(set-face-attribute 'default nil :font "Lucida Console-10")
 
-;; For resizing screens between external monitor and retina
-(defun fontify-frame (frame)
+(defun set-frame-size-according-to-resolution ()
   (interactive)
   (if window-system
       (progn
-        (if (> (x-display-pixel-width) 2000)
+        ;; use 120 char wide window for largish displays
+        ;; and smaller 80 column windows for smaller displays
+        ;; pick whatever numbers make sense for you
+        (if (> (x-display-pixel-width) 1500)
+            (setq default-frame-alist
+                  '((top . 0)(left . 0)
+                    (width . 170)(height . 75)
+                    (font . "Lucida Console-10")
+                    ))
+          (setq default-frame-alist
+                '((top . 0)(left . 0)
+                  (width . 170)(height . 75)
+                  (font . "Lucida Console-10")
+                  )))
+        ))
+)
+(set-frame-size-according-to-resolution)
+
+;; For resizing screens between external monitor and retina
+;;(defun fontify-frame (frame)
+;;  (interactive)
+;; (if window-system
+;;      (progn
+;;        (if (> (x-display-pixel-width) 2000)
 	    ;; For the larger external display
-	    (set-face-attribute
-	     'default nil :height 180)
+;;	    (set-face-attribute
+;;	     'default nil :height 180)
 	    ;; For the smaller retina
-	    (set-face-attribute
-	     'default nil :height 120)))))
+;;	    (set-face-attribute
+;;	     'default nil :height 120)))))
 
 ;; Fontify current frame
-(fontify-frame nil)
+;;(fontify-frame nil)
 
 ;; Fontify any future frames
-(push 'fontify-frame after-make-frame-functions)
+;;(push 'fontify-frame after-make-frame-functions)
 
 ;; Set the default directory
 (setq default-directory "~/")
@@ -188,7 +188,19 @@
 ;; Make sure that [mM]akefile's with an 'extension' are opened in makefile-mode
 (add-to-list 'auto-mode-alist '("[mM]akefile\\.[a-zA-Z]*\\'" . makefile-mode))
 
+;; set shell to git bash
+(defun run-bash ()
+      (interactive)
+      (let ((shell-file-name "C:\\Users\\e155986\\AppData\\Local\\Programs\\Git\\bin\\bash.exe"))
+            (shell "*bash*")))
+			
+;; set shell to git bash
+;; setq explicit-shell-file-name "C:/Users/e155986/AppData/Local/Programs/Git/git-bash.exe")
+;;(setq explicit-bash.exe-args '("--login" "-i"))
+
+
 ;; Load separated customisation files.
+(load "~/.emacs.d/packages-evil.el")
 (load "~/.emacs.d/packages-theming.el")
 (load "~/.emacs.d/packages-latex.el")
 (load "~/.emacs.d/packages-stan.el")
@@ -200,14 +212,43 @@
 (load "~/.emacs.d/packages-multiterm.el")
 (load "~/.emacs.d/packages-web.el")
 (org-babel-load-file "~/.emacs.d/org-setup.org")
-(load "~/.emacs.d/packages-mu4e.el")
-(load "~/.emacs.d/fonts.el")
+;; (load "~/.emacs.d/packages-mu4e.el")
+;; (load "~/.emacs.d/fonts.el")
 (load "~/.emacs.d/packages-bling.el")
 (load "~/.emacs.d/packages-ivy.el")
 (load "~/.emacs.d/packages-ess.el")
 (load "~/.emacs.d/packages-polymode.el")
 (load "~/.emacs.d/packages-flycheck.el")
+(load "~/.emacs.d/packages-treemacs.el")
+(load "~/.emacs.d/packages-spaceline.el")
 (org-babel-load-file "~/.emacs.d/modeline-setup.org")
 
 ;; ;; (load "~/.emacs.d/packages-elpy.el")
 ;; ;; (load "~/.emacs.d/packages-execpath.el")
+
+
+(defun toggle-frame-split ()
+  "If the frame is split vertically, split it horizontally or vice versa.
+Assumes that the frame is only split into two."
+  (interactive)
+  (unless (= (length (window-list)) 2) (error "Can only toggle a frame split in two"))
+  (let ((split-vertically-p (window-combined-p)))
+    (delete-window) ; closes current window
+    (if split-vertically-p
+        (split-window-horizontally)
+      (split-window-vertically)) ; gives us a split with the other window twice
+    (switch-to-buffer nil))) ; restore the original window in this part of the frame
+
+;; I don't use the default binding of 'C-x 5', so use toggle-frame-split instead
+(global-set-key (kbd "C-x 5") 'toggle-frame-split)
+(put 'upcase-region 'disabled nil)
+
+(global-display-line-numbers-mode)
+
+(use-package ace-window
+  :ensure t
+  :config
+  :bind* ("M-o" . ace-window)
+  :init (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+

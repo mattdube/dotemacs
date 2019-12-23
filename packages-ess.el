@@ -23,7 +23,7 @@
   (setq-default inferior-R-args "--no-restore-history --no-restore --no-save")
   (add-hook 'ess-mode-hook (lambda () (auto-fill-mode 1)))
   (setq ess-ask-for-ess-directory nil)
-  (setq inferior-R-program-name "/usr/local/bin/R") 
+  (setq inferior-R-program-name "C:\\Users\\e155986\\R\\R-3.6.1patched\\bin\\x64\\Rterm.exe") 
   (setq ess-local-process-name "R")
   ;; Default indentation style as RStudio
   (setq ess-default-style 'RStudio-)
@@ -46,3 +46,38 @@
   (just-one-space 1)
   (insert "%>%")
   (ess-newline-and-indent))
+  
+  
+;; Disable conversion of underscores to arrows; map to M-- instead
+(ess-toggle-underscore nil)
+(setq ess-S-assign-key (kbd "M--"))
+(add-hook 'ess-mode-hook (lambda () (ess-toggle-S-assign-key t)))
+
+
+
+;; Bring up empty R script and R console for quick calculations
+(defun R-scratch ()
+  (interactive)
+  (progn
+    (delete-other-windows)
+    (setq new-buf (get-buffer-create "scratch.R"))
+    (switch-to-buffer new-buf)
+    (R-mode)
+    (setq w1 (selected-window))
+    (setq w1name (buffer-name))
+    (setq w2 (split-window w1 nil t))
+    (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
+        (R))
+    (set-window-buffer w2 "*R*")
+    (set-window-buffer w1 w1name)))
+
+(global-set-key (kbd "C-x 9") 'R-scratch)
+
+(defun ess-r-shiny-run-app (&optional arg)
+  "Interface for `shiny::runApp()'.
+With prefix ARG ask for extra args."
+  (interactive)
+  (inferior-ess-r-force)
+  (ess-eval-linewise
+   "shiny::runApp(\".\")\n" "Running app" arg
+   '("" (read-string "Arguments: " "recompile = TRUE"))))

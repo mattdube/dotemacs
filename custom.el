@@ -35,7 +35,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-mode zenburn-theme yasnippet yaml-mode use-package ubuntu-theme stan-mode spacemacs-theme polymode noctilux-theme multi-term monokai-theme markdown-mode magit highlight-parentheses ess dracula-theme company auctex atom-one-dark-theme))))
+    (spaceline yaml-mode web-mode use-package treemacs-projectile treemacs-magit treemacs-icons-dired treemacs-evil swiper stan-snippets spacemacs-theme solarized-theme poly-R paper-theme nimbus-theme neotree multi-term highlight-parentheses heroku-theme flycheck flucui-themes ess dracula-theme doom-modeline dimmer company auctex anti-zenburn-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
